@@ -1,0 +1,62 @@
+
+# Node & package managers
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs & PID files
+logs/
+*.log
+*.pid
+*.seed
+*.pid.lock
+pids/
+
+# Build & output
+dist/
+build/
+tmp/
+temp/
+.cache/
+
+# Coverage & test outputs
+coverage/
+.nyc_output/
+.jest/
+
+# Linters & tooling caches
+.eslintcache
+.stylelintcache
+
+# Uploads & storage (if storing locally; prefer cloud storage)
+uploads/
+storage/
+public/uploads/
+
+# Database & dumps
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+dump.rdb
+*.rdb
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# TypeScript build info (if TS is used)
+*.tsbuildinfo
+
+# Misc
+*.orig

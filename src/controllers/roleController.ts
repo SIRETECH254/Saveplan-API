@@ -100,7 +100,10 @@ export const createRole = async (req: Request, res: Response, next: NextFunction
       data: { role }
     });
   } catch (error: any) {
-    next(errorHandler(500, "Server error while creating role"));
+    if (error.name === "ValidationError") {
+      return next(errorHandler(400, error.message));
+    }
+    next(errorHandler(500, `Server error while creating role: ${error.message}`));
   }
 };
 

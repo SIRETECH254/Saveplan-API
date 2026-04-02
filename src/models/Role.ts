@@ -6,7 +6,6 @@ const roleSchema = new Schema<IRole>({
     type: String,
     required: true,
     unique: true,
-    enum: ["member", "treasurer", "chairman", "secretary"],
     lowercase: true,
     trim: true
   },

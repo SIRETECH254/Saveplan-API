@@ -49,7 +49,7 @@ router.get("/roles", authenticateToken, authorizePermissions(["can_manage_roles"
  *     responses:
  *       200: { description: Role details }
  */
-router.get("/roles/:roleId", authenticateToken, authorizePermissions(["can_manage_roles"]), getRole);
+router.get("/roles/:roleId", authenticateToken, getRole);
 
 /**
  * @swagger

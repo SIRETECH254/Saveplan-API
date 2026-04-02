@@ -1,7 +1,7 @@
 import { Document, Types } from 'mongoose';
 
 export interface IRole extends Document {
-  name: "member" | "treasurer" | "chairman" | "secretary";
+  name: string;
   description: string;
   permissions: string[];
   isActive: boolean;

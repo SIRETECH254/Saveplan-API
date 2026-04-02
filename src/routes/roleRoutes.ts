@@ -8,7 +8,7 @@ import {
   getMembersByRole,
   manageRoles
 } from "../controllers/roleController";
-import { authenticateToken, authorizePermissions } from "../middleware/auth";
+import { authenticateToken, authorizeRoles } from "../middleware/auth";
 
 const router = express.Router();
 
@@ -32,7 +32,7 @@ const router = express.Router();
  *     responses:
  *       200: { description: Role list }
  */
-router.get("/roles", authenticateToken, authorizePermissions(["can_manage_roles"]), getAllRoles);
+router.get("/roles", authenticateToken, authorizeRoles(["chairman"]), getAllRoles);
 
 /**
  * @swagger
@@ -72,7 +72,7 @@ router.get("/roles/:roleId", authenticateToken, getRole);
  *     responses:
  *       201: { description: Role created }
  */
-router.post("/roles", authenticateToken, authorizePermissions(["can_manage_roles"]), createRole);
+router.post("/roles", authenticateToken, authorizeRoles(["chairman"]), createRole);
 
 /**
  * @swagger
@@ -99,7 +99,7 @@ router.post("/roles", authenticateToken, authorizePermissions(["can_manage_roles
  *     responses:
  *       200: { description: Role updated }
  */
-router.put("/roles/:roleId", authenticateToken, authorizePermissions(["can_manage_roles"]), updateRole);
+router.put("/roles/:roleId", authenticateToken, authorizeRoles(["chairman"]), updateRole);
 
 /**
  * @swagger
@@ -116,7 +116,7 @@ router.put("/roles/:roleId", authenticateToken, authorizePermissions(["can_manag
  *     responses:
  *       200: { description: Role deleted }
  */
-router.delete("/roles/:roleId", authenticateToken, authorizePermissions(["can_manage_roles"]), deleteRole);
+router.delete("/roles/:roleId", authenticateToken, authorizeRoles(["chairman"]), deleteRole);
 
 /**
  * @swagger
@@ -142,7 +142,7 @@ router.delete("/roles/:roleId", authenticateToken, authorizePermissions(["can_ma
  *     responses:
  *       200: { description: Member list }
  */
-router.get("/roles/:roleId/members", authenticateToken, authorizePermissions(["can_manage_roles"]), getMembersByRole);
+router.get("/roles/:roleId/members", authenticateToken, authorizeRoles(["chairman"]), getMembersByRole);
 
 /**
  * @swagger
@@ -164,6 +164,6 @@ router.get("/roles/:roleId/members", authenticateToken, authorizePermissions(["c
  *     responses:
  *       200: { description: Roles updated }
  */
-router.post("/manage-roles", authenticateToken, authorizePermissions(["can_manage_roles"]), manageRoles);
+router.post("/manage-roles", authenticateToken, authorizeRoles(["chairman"]), manageRoles);
 
 export default router;

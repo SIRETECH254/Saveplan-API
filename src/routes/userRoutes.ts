@@ -7,7 +7,7 @@ import {
   deleteMembers,
   updateMemberStatus
 } from "../controllers/userController";
-import { authenticateToken, authorizePermissions } from "../middleware/auth";
+import { authenticateToken, authorizeRoles } from "../middleware/auth";
 
 const router = express.Router();
 
@@ -71,7 +71,7 @@ router.put("/change-password", authenticateToken, changePassword);
  *     responses:
  *       200: { description: Member list }
  */
-router.get("/oversight", authenticateToken, authorizePermissions(["can_view_all_ledgers"]), getAllUsers);
+router.get("/oversight", authenticateToken, authorizeRoles(["chairman", "secretary"]), getAllUsers);
 
 /**
  * @swagger
@@ -88,7 +88,7 @@ router.get("/oversight", authenticateToken, authorizePermissions(["can_view_all_
  *     responses:
  *       200: { description: User details }
  */
-router.get("/:userId", authenticateToken, authorizePermissions(["can_view_all_ledgers"]), getUserById);
+router.get("/:userId", authenticateToken, authorizeRoles(["chairman", "secretary"]), getUserById);
 
 /**
  * @swagger
@@ -114,7 +114,7 @@ router.get("/:userId", authenticateToken, authorizePermissions(["can_view_all_le
  *     responses:
  *       200: { description: Status updated }
  */
-router.put("/:userId/status", authenticateToken, authorizePermissions(["can_update_profiles"]), updateMemberStatus);
+router.put("/:userId/status", authenticateToken, authorizeRoles(["chairman", "secretary"]), updateMemberStatus);
 
 /**
  * @swagger
@@ -131,6 +131,6 @@ router.put("/:userId/status", authenticateToken, authorizePermissions(["can_upda
  *     responses:
  *       200: { description: Member deleted }
  */
-router.delete("/:userId", authenticateToken, authorizePermissions(["can_manage_roles"]), deleteMembers);
+router.delete("/:userId", authenticateToken, authorizeRoles(["chairman"]), deleteMembers);
 
 export default router;

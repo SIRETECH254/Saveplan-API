@@ -203,13 +203,13 @@ import {
   updateInvitation,
   deleteInvitation
 } from "../controllers/invitationCodeController";
-import { authenticateToken, authorizePermissions } from "../middleware/auth";
+import { authenticateToken, authorizeRoles } from "../middleware/auth";
 
 const router = express.Router();
 
 // Middleware lock for all routes
 router.use(authenticateToken);
-router.use(authorizePermissions(["can_generate_invite"]));
+router.use(authorizeRoles(["chairman"]));
 
 router.post("/", generateInvitation);
 router.get("/", getInvitations);

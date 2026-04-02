@@ -7,13 +7,13 @@ declare global {
   namespace Express {
     interface Request {
       user?: any; // Populated IUser
-      permissions?: string[]; // Flat array of permission strings
+      roles?: string[]; // Array of role names
     }
   }
 }
 
 /**
- * Verifies JWT and populates req.user with roles and flat permissions.
+ * Verifies JWT and populates req.user and req.roles.
  */
 export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -29,11 +29,11 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
       return next(errorHandler(401, "User unauthorized or inactive"));
     }
 
-    // Flatten permissions from all assigned roles
-    const permissions = (user.roles as any[]).flatMap((role: any) => role.permissions);
+    // Extract role names from the populated roles
+    const roles = (user.roles as any[]).map((role: any) => role.name);
 
     req.user = user;
-    req.permissions = [...new Set(permissions)];
+    req.roles = roles;
 
     next();
   } catch (err) {
@@ -42,18 +42,18 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
 };
 
 /**
- * Enforces RBAC by checking if the user has all required permissions.
+ * Enforces RBAC by checking if the user has at least one of the required roles.
  */
-export const authorizePermissions = (requiredPermissions: string[]) => {
+export const authorizeRoles = (allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.permissions) {
+    if (!req.roles) {
       return next(errorHandler(403, "Insufficient permissions (No roles assigned)"));
     }
 
-    const hasPermission = requiredPermissions.every(p => req.permissions?.includes(p));
+    const hasRole = allowedRoles.some(role => req.roles?.includes(role));
 
-    if (!hasPermission) {
-      return next(errorHandler(403, "Insufficient permissions for this action"));
+    if (!hasRole) {
+      return next(errorHandler(403, "Insufficient permissions: Access denied for your role"));
     }
 
     next();

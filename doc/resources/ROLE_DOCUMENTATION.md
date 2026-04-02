@@ -419,17 +419,17 @@ import {
   getMembersByRole,
   manageRoles
 } from "../controllers/roleController";
-import { authenticateToken, authorizePermissions } from "../middleware/auth";
+import { authenticateToken, authorizeRoles } from "../middleware/auth";
 
 const router = express.Router();
 
-router.get("/roles", authenticateToken, authorizePermissions(["can_manage_roles"]), getAllRoles);
-router.get("/roles/:roleId", authenticateToken, authorizePermissions(["can_manage_roles"]), getRole);
-router.post("/roles", authenticateToken, authorizePermissions(["can_manage_roles"]), createRole);
-router.put("/roles/:roleId", authenticateToken, authorizePermissions(["can_manage_roles"]), updateRole);
-router.delete("/roles/:roleId", authenticateToken, authorizePermissions(["can_manage_roles"]), deleteRole);
-router.get("/roles/:roleId/members", authenticateToken, authorizePermissions(["can_manage_roles"]), getMembersByRole);
-router.post("/manage-roles", authenticateToken, authorizePermissions(["can_manage_roles"]), manageRoles);
+router.get("/roles", authenticateToken, authorizeRoles(["chairman"]), getAllRoles);
+router.get("/roles/:roleId", authenticateToken, getRole);
+router.post("/roles", authenticateToken, authorizeRoles(["chairman"]), createRole);
+router.put("/roles/:roleId", authenticateToken, authorizeRoles(["chairman"]), updateRole);
+router.delete("/roles/:roleId", authenticateToken, authorizeRoles(["chairman"]), deleteRole);
+router.get("/roles/:roleId/members", authenticateToken, authorizeRoles(["chairman"]), getMembersByRole);
+router.post("/manage-roles", authenticateToken, authorizeRoles(["chairman"]), manageRoles);
 
 export default router;
 ```

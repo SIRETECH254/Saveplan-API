@@ -393,7 +393,7 @@ import {
   deleteMembers,
   updateMemberStatus
 } from "../controllers/userController";
-import { authenticateToken, authorizePermissions } from "../middleware/auth";
+import { authenticateToken, authorizeRoles } from "../middleware/auth";
 
 const router = express.Router();
 
@@ -401,15 +401,141 @@ router.put("/update-profile", authenticateToken, updateUserProfile);
 
 router.put("/change-password", authenticateToken, changePassword);
 
-router.get("/oversight", authenticateToken, authorizePermissions(["can_view_all_ledgers"]), getAllUsers);
+router.get("/oversight", authenticateToken, authorizeRoles(["chairman", "secretary"]), getAllUsers);
 
-router.get("/:userId", authenticateToken, authorizePermissions(["can_view_all_ledgers"]), getUserById);
+router.get("/:userId", authenticateToken, authorizeRoles(["chairman", "secretary"]), getUserById);
 
-router.put("/:userId/status", authenticateToken, authorizePermissions(["can_update_profiles"]), updateMemberStatus);
+router.put("/:userId/status", authenticateToken, authorizeRoles(["chairman", "secretary"]), updateMemberStatus);
 
-router.delete("/:userId", authenticateToken, authorizePermissions(["can_manage_roles"]), deleteMembers);
+router.delete("/:userId", authenticateToken, authorizeRoles(["chairman"]), deleteMembers);
 
 export default router;
+```
+
+### Route Details
+
+#### `PUT /api/users/update-profile`
+**Headers:** `Authorization: Bearer <token>`
+**Body:**
+```json
+{
+  "name": "Jane Updated",
+  "phone": "+254711223344",
+  "notificationPreferences": {
+    "sms": false
+  }
+}
+```
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Profile updated successfully",
+  "data": {
+    "user": {
+      "id": "...",
+      "name": "Jane Updated",
+      "email": "jane@example.com",
+      "phone": "+254711223344",
+      "roles": [...],
+      "isVerified": true
+    }
+  }
+}
+```
+
+#### `PUT /api/users/change-password`
+**Headers:** `Authorization: Bearer <token>`
+**Body:**
+```json
+{
+  "currentPassword": "oldPassword123",
+  "newPassword": "newSecurePassword456"
+}
+```
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Password changed successfully"
+}
+```
+
+#### `GET /api/users/oversight`
+**Headers:** `Authorization: Bearer <admin_token>`
+**Query Params:** `page=1`, `limit=10`, `search=Jane`, `status=active`
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "users": [
+      {
+        "_id": "...",
+        "name": "Jane Doe",
+        "email": "jane@example.com",
+        "phone": "+254...",
+        "roles": [...],
+        "isActive": true,
+        "isVerified": true
+      }
+    ],
+    "pagination": {
+      "currentPage": 1,
+      "totalPages": 5,
+      "totalUsers": 48,
+      "hasNextPage": true,
+      "hasPrevPage": false
+    }
+  }
+}
+```
+
+#### `GET /api/users/:userId`
+**Headers:** `Authorization: Bearer <admin_token>`
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "user": {
+      "_id": "60d5f9b4f1b2c3d4e5f6a7b9",
+      "name": "Jane Doe",
+      "email": "jane@example.com",
+      "phone": "+254700000000",
+      "roles": [...],
+      "isActive": true,
+      "isVerified": true,
+      "createdAt": "..."
+    }
+  }
+}
+```
+
+#### `PUT /api/users/:userId/status`
+**Headers:** `Authorization: Bearer <admin_token>`
+**Body:**
+```json
+{
+  "isActive": false
+}
+```
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Member account deactivated successfully"
+}
+```
+
+#### `DELETE /api/users/:userId`
+**Headers:** `Authorization: Bearer <chairman_token>`
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Member deleted successfully"
+}
 ```
 
 ---

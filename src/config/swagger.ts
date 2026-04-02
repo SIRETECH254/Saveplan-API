@@ -31,6 +31,7 @@ const options = {
     },
     tags: [
       { name: "Auth", description: "Authentication and user session management" },
+      { name: "Users", description: "Family member profile management" },
       { name: "Contributions", description: "Member savings and contribution management" },
       { name: "Payments", description: "M-Pesa transaction processing" },
       { name: "Stats", description: "Dashboards and analytics" },

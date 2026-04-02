@@ -6,6 +6,10 @@ import path from "path";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import swaggerConfig from "./config/swagger";
+import authRoutes from "./routes/authRoutes";
+import userRoutes from "./routes/userRoutes";
+import roleRoutes from "./routes/roleRoutes";
+import invitationRoutes from "./routes/invitationCodeRoutes";
 
 const app = express();
 const PORT = process.env.PORT || 2500;
@@ -88,8 +92,11 @@ app.use(
   swaggerConfig.swaggerUi.setup(swaggerConfig.specs, swaggerConfig.options)
 );
 
-// Route Registrations (Add routes here as they are developed)
-// app.use("/api/auth", authRoutes);
+// Route Registrations
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/admin", roleRoutes);
+app.use("/api/invitations", invitationRoutes);
 
 // Real-time Features (Socket.io)
 // Create HTTP server that wraps the Express app
@@ -155,7 +162,7 @@ app.use((req, res) => {
 // Global error handler
 app.use(
   (err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-    console.error(err.stack);
+    console.error(err.stack); // Log the error stack for debugging
 
     const statusCode = err.statusCode || 500;
     const message = err.message || "Internal Server Error";
@@ -165,7 +172,7 @@ app.use(
       message,
       ...(process.env.NODE_ENV === "development" && {
         error: err.message,
-        stack: err.stack
+        stack: err.stack // Only include stack trace in development
       })
     });
   }

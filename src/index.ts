@@ -11,6 +11,7 @@ import userRoutes from "./routes/userRoutes";
 import roleRoutes from "./routes/roleRoutes";
 import invitationRoutes from "./routes/invitationCodeRoutes";
 import contributionRoutes from "./routes/contributionRoutes";
+import paymentRoutes from "./routes/paymentRoutes";
 
 const app = express();
 const PORT = process.env.PORT || 2500;
@@ -99,6 +100,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/admin", roleRoutes);
 app.use("/api/invitations", invitationRoutes);
 app.use("/api/contributions", contributionRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // Real-time Features (Socket.io)
 // Create HTTP server that wraps the Express app

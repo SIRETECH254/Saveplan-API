@@ -65,6 +65,22 @@ export interface IPayout extends Document {
   updatedAt: Date;
 }
 
+export interface IPayment extends Document {
+  memberId?: Types.ObjectId | IUser;
+  contributionId?: Types.ObjectId | IContribution;
+  paymentNumber: string;
+  amount: number;
+  currency: "KES";
+  status: "PENDING" | "SUCCESS" | "FAILED";
+  method: "MPESA" | "CASH";
+  transactionRef?: string;
+  processorRefs?: {
+    daraja?: { merchantRequestId?: string; checkoutRequestId?: string };
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface ApiResponse<T = any> {
   success: boolean;
   message: string;

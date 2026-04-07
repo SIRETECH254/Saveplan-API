@@ -43,10 +43,11 @@ export interface IInvitationCode extends Document {
 
 export interface IContribution extends Document {
   memberId: Types.ObjectId | IUser;
+  contributionNumber: string;
   amount: number;
   status: "PENDING" | "COMPLETED" | "CANCELLED";
   paymentId?: string;
-  transactionDate: Date;
+  transactionDate?: Date;
   notes?: string;
   createdAt: Date;
   updatedAt: Date;

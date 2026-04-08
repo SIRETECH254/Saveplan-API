@@ -98,12 +98,19 @@ app.use(
 
 // Route Registrations
 app.use("/api/auth", authRoutes);
+
 app.use("/api/users", userRoutes);
+
 app.use("/api/admin", roleRoutes);
+
 app.use("/api/invitations", invitationRoutes);
+
 app.use("/api/contributions", contributionRoutes);
+
 app.use("/api/payments", paymentRoutes);
+
 app.use("/api/dashboard", dashboardRoutes);
+
 app.use("/api/analytics", analyticsRoutes);
 
 // Real-time Features (Socket.io)

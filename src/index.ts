@@ -13,6 +13,7 @@ import invitationRoutes from "./routes/invitationCodeRoutes";
 import contributionRoutes from "./routes/contributionRoutes";
 import paymentRoutes from "./routes/paymentRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
+import analyticsRoutes from "./routes/analyticsRoutes";
 
 const app = express();
 const PORT = process.env.PORT || 2500;
@@ -103,6 +104,7 @@ app.use("/api/invitations", invitationRoutes);
 app.use("/api/contributions", contributionRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 // Real-time Features (Socket.io)
 // Create HTTP server that wraps the Express app
